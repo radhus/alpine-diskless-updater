@@ -1,7 +1,10 @@
 #!/bin/sh
 
 usage() {
-    echo "$0 <output> <branch> [--with-xen] [package ...]"
+    echo "$0 <output> <branch> [--with-xen] [--versions] [package ...]"
+    echo
+    echo " --version   will only list the kernel package version"
+    echo "             which can be used"
     echo
     echo "Examples:"
     echo " $0 /tmp/v3.9/ v3.9"
@@ -28,6 +31,9 @@ shift
 xen=false
 [ "$1" == "--with-xen" ] && xen=true && shift
 
+versions=false
+[ "$1" == "--versions" ] && versions=true && shift
+
 pkgs=$(pkgargs $@)
 
 set -e
@@ -40,6 +46,15 @@ http://dl-cdn.alpinelinux.org/alpine/edge/community
 http://dl-cdn.alpinelinux.org/alpine/edge/testing
 EOF
 
+if [ "$versions" = true ]; then
+    db=$(mktemp -d)
+    apk --quiet --root "${db}" --repositories-file "${repos}" --keys-dir /etc/apk/keys \
+        add --initdb --update-cache
+    apk --root "${db}" --repositories-file "${repos}" --keys-dir /etc/apk/keys \
+        search -x linux-vanilla
+    exit $?
+fi
+
 set -x
 
 update-kernel --repositories-file "${repos}" ${pkgs}  "${tmp}"
@@ -47,6 +62,7 @@ if [ "$xen" = true ]; then
     xenfile=$(mktemp)
     apk fetch --repositories-file "${repos}" --no-cache --stdout xen-hypervisor --quiet | tar -C "${tmp}" --strip-components=1 -xz boot
 fi
+mkdir -p "${output}"
 cp -a "${tmp}"/* "${output}"/
 rm "${repos}"
 rm -r "${tmp}"
