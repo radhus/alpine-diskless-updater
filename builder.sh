@@ -1,12 +1,19 @@
 #!/bin/sh
 
+DEFAULT_CMDLINE_XEN=""
+DEFAULT_CMDLINE_KERNEL="modules=loop,squashfs,sd-mod,usb-storage quiet"
+
 usage() {
-    echo "$0 <output> <branch> [--with-xen] [--with-grub] [--versions] [package ...]"
+    echo "$0 <output> <branch> [--with-xen] [--with-grub] [--cmdline-xen args] [--cmdline-kernel args] [--versions] [package ...]"
     echo
-    echo " --with-xen  include Xen hypervisor"
-    echo " --with-grub include Grub configuration"
-    echo " --versions  will only list the kernel package version"
-    echo "             which will be used"
+    echo " --with-xen       include Xen hypervisor"
+    echo " --with-grub      include Grub configuration"
+    echo " --cmdline-xen    arguments to Xen hypervisor"
+    echo "                  default: \"${DEFAULT_CMDLINE_XEN}\""
+    echo " --cmdline-kernel arguments to Linux kernel"
+    echo "                  default: \"${DEFAULT_CMDLINE_KERNEL}\""
+    echo " --versions       will only list the kernel package version"
+    echo "                  which will be used"
     echo
     echo "Examples:"
     echo " $0 /tmp/v3.9/ v3.9"
@@ -34,8 +41,8 @@ xen=false
 grub=false
 versions=false
 flavor="vanilla"
-cmdline_xen=""
-cmdline_kernel="modules=loop,squashfs,sd-mod,usb-storage quiet"
+cmdline_xen="${DEFAULT_CMDLINE_XEN}"
+cmdline_kernel="${DEFAULT_CMDLINE_KERNEL}"
 
 while [ $# -gt 0 ]; do
     arg="$1"
@@ -50,6 +57,14 @@ while [ $# -gt 0 ]; do
         ;;
     --with-grub)
         grub=true
+        ;;
+    --cmdline-xen)
+        cmdline_xen="$1"
+        shift
+        ;;
+    --cmdline-kernel)
+        cmdline_kernel="$1"
+        shift
         ;;
     --versions)
         versions=true
