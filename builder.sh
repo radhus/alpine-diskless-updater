@@ -5,7 +5,7 @@ usage() {
     echo
     echo " --with-xen  include Xen hypervisor"
     echo " --with-grub include Grub configuration"
-    echo " --version   will only list the kernel package version"
+    echo " --versions  will only list the kernel package version"
     echo "             which will be used"
     echo
     echo "Examples:"
