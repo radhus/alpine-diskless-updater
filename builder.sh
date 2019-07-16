@@ -4,7 +4,7 @@ usage() {
     echo "$0 <output> <branch> [--with-xen] [--versions] [package ...]"
     echo
     echo " --version   will only list the kernel package version"
-    echo "             which can be used"
+    echo "             which will be used"
     echo
     echo "Examples:"
     echo " $0 /tmp/v3.9/ v3.9"
@@ -29,10 +29,20 @@ branch=$1
 shift
 
 xen=false
-[ "$1" == "--with-xen" ] && xen=true && shift
-
 versions=false
-[ "$1" == "--versions" ] && versions=true && shift
+
+while [ $# -gt 0 ]; do
+    arg="$1"
+    shift
+    case "$arg" in
+    --with-xen)
+        xen=true
+        ;;
+    --versions)
+        versions=true
+        ;;
+    esac
+done
 
 pkgs=$(pkgargs $@)
 
