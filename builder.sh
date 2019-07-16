@@ -41,6 +41,10 @@ while [ $# -gt 0 ]; do
     arg="$1"
     shift
     case "$arg" in
+    --help)
+        usage
+        exit 0
+        ;;
     --with-xen)
         xen=true
         ;;
