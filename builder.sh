@@ -3,6 +3,7 @@
 usage() {
     echo "$0 <output> <branch> [--with-xen] [--versions] [package ...]"
     echo
+    echo " --with-xen  include Xen hypervisor"
     echo " --version   will only list the kernel package version"
     echo "             which will be used"
     echo
