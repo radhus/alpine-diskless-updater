@@ -95,7 +95,11 @@ fi
 
 set -x
 
-update-kernel --repositories-file "${repos}" ${pkgs}  "${tmp}"
+update-kernel \
+    --repositories-file "${repos}" \
+    --flavor "${flavor}" \
+    ${pkgs} \
+    "${tmp}"
 
 if [ "$xen" = true ]; then
     xenfile=$(mktemp)
