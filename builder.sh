@@ -105,7 +105,11 @@ fi
 if [ "$grub" = true ]; then
     mkdir -p "${tmp}/grub"
     cfg="${tmp}/grub/grub.cfg"
-    : > "${cfg}"
+    cat <<EOF >> "${cfg}"
+set timeout=5
+set default=0
+
+EOF
     if [ "$xen" = true ]; then
         cat <<EOF >> "${cfg}"
 menuentry "Xen/Linux ${flavor}" {
