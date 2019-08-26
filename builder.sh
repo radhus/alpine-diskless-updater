@@ -74,7 +74,7 @@ tmp=$(mktemp -d)
 repos=$(mktemp)
 cat <<EOF >"${repos}"
 http://dl-cdn.alpinelinux.org/alpine/${branch}/main
-http://dl-cdn.alpinelinux.org/alpine/edge/community
+http://dl-cdn.alpinelinux.org/alpine/${branch}/community
 http://dl-cdn.alpinelinux.org/alpine/edge/testing
 EOF
 
