@@ -21,14 +21,6 @@ usage() {
     exit 1
 }
 
-pkgargs() {
-    [ -n $1 ] || return
-    for x in $@; do
-        echo -n "-p $x "
-    done
-    echo
-}
-
 output=$1
 [ -n "${output}" ] || usage
 shift
@@ -43,6 +35,7 @@ versions=false
 flavor="vanilla"
 cmdline_xen="${DEFAULT_CMDLINE_XEN}"
 cmdline_kernel="${DEFAULT_CMDLINE_KERNEL}"
+pkgs=""
 
 while [ $# -gt 0 ]; do
     arg="$1"
@@ -69,10 +62,11 @@ while [ $# -gt 0 ]; do
     --versions)
         versions=true
         ;;
+    *)
+        pkgs="${pkgs} -p ${arg} "
+        ;;
     esac
 done
-
-pkgs=$(pkgargs $@)
 
 set -e
 
