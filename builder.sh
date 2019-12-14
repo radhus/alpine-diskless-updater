@@ -2,10 +2,13 @@
 
 DEFAULT_CMDLINE_XEN=""
 DEFAULT_CMDLINE_KERNEL="modules=loop,squashfs,sd-mod,usb-storage quiet"
+DEFAULT_FLAVOR="vanilla"
 
 usage() {
-    echo "$0 <output> <branch> [--with-xen] [--with-grub] [--cmdline-xen args] [--cmdline-kernel args] [--versions] [package ...]"
+    echo "$0 <output> <branch> [--flavor flavor] [--with-xen] [--with-grub] [--cmdline-xen args] [--cmdline-kernel args] [--versions] [package ...]"
     echo
+    echo " --flavor         set the kernel package flavor"
+    echo "                  default: ${DEFAULT_FLAVOR}"
     echo " --with-xen       include Xen hypervisor"
     echo " --with-grub      include Grub configuration"
     echo " --cmdline-xen    arguments to Xen hypervisor"
@@ -32,7 +35,7 @@ shift
 xen=false
 grub=false
 versions=false
-flavor="vanilla"
+flavor="${DEFAULT_FLAVOR}"
 cmdline_xen="${DEFAULT_CMDLINE_XEN}"
 cmdline_kernel="${DEFAULT_CMDLINE_KERNEL}"
 pkgs=""
@@ -44,6 +47,10 @@ while [ $# -gt 0 ]; do
     --help)
         usage
         exit 0
+        ;;
+    --flavor)
+        flavor="$1"
+        shift
         ;;
     --with-xen)
         xen=true
