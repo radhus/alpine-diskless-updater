@@ -17,7 +17,7 @@ usage() {
     echo
     echo "Examples:"
     echo " $0 /tmp/v3.9/ v3.9"
-    echo " $0 /media/sda1/ edge --with-xen wireguard-vanilla"
+    echo " $0 /media/sda1/ edge --with-xen wireguard"
     exit 1
 }
 
@@ -63,7 +63,7 @@ while [ $# -gt 0 ]; do
         versions=true
         ;;
     *)
-        pkgs="${pkgs} -p ${arg} "
+        pkgs="${pkgs} -p ${arg}-${flavor} "
         ;;
     esac
 done
