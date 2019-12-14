@@ -2,13 +2,16 @@
 
 DEFAULT_CMDLINE_XEN=""
 DEFAULT_CMDLINE_KERNEL="modules=loop,squashfs,sd-mod,usb-storage quiet"
-DEFAULT_FLAVOR="vanilla"
+DEFAULT_FLAVOR="lts"
+DEFAULT_FLAVOR_OLD="vanilla"
+NEW_VERSION_MIN="v3.11"
 
 usage() {
     echo "$0 <output> <branch> [--flavor flavor] [--with-xen] [--with-grub] [--cmdline-xen args] [--cmdline-kernel args] [--versions] [package ...]"
     echo
     echo " --flavor         set the kernel package flavor"
-    echo "                  default: ${DEFAULT_FLAVOR}"
+    echo "                  default for >=${NEW_VERSION_MIN}: ${DEFAULT_FLAVOR}"
+    echo "                  default for <${NEW_VERSION_MIN}:  ${DEFAULT_FLAVOR_OLD}"
     echo " --with-xen       include Xen hypervisor"
     echo " --with-grub      include Grub configuration"
     echo " --cmdline-xen    arguments to Xen hypervisor"
@@ -39,6 +42,14 @@ flavor="${DEFAULT_FLAVOR}"
 cmdline_xen="${DEFAULT_CMDLINE_XEN}"
 cmdline_kernel="${DEFAULT_CMDLINE_KERNEL}"
 pkgs=""
+
+is_old_version() {
+    [ "$( echo -e "$branch\n${NEW_VERSION_MIN}" | sort -V | head -n1)" != "${NEW_VERSION_MIN}" ]
+}
+
+if [ "${branch}" != "edge" ] && is_old_version; then
+    flavor="${DEFAULT_FLAVOR_OLD}"
+fi
 
 while [ $# -gt 0 ]; do
     arg="$1"
