@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add \
+RUN apk add --no-cache \
     alpine-conf \
     squashfs-tools
 
